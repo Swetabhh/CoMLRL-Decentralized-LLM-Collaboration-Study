@@ -1,0 +1,61 @@
+name: Pages
+
+# Temporarily disabled for private repo. Re-enable by adding push triggers below
+# or by dispatching with publish=true once the repo is public.
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish docs to GitHub Pages"
+        required: true
+        default: "false"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: ${{ inputs.publish == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: hugo
+          enablement: true
+
+      - name: Build with Hugo
+        run: hugo --gc --minify -s docs -b "${{ steps.pages.outputs.base_url }}"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/public
+
+  deploy:
+    if: ${{ inputs.publish == 'true' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,62 @@
+name: docs-build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/docs-build.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'docs/**'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: 0
+
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: 'latest'
+        extended: true
+
+    - name: Build documentation
+      run: |
+        cd docs
+        hugo --minify
+
+    - name: Deploy to OpenMLRL.github.io
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      env:
+        GITHUB_TOKEN: ${{ secrets.OPENMLRL_TOKEN }}
+      run: |
+        # Clone the OpenMLRL.github.io repository
+        git clone --depth 1 https://x-access-token:${GITHUB_TOKEN}@github.com/OpenMLRL/OpenMLRL.github.io.git /tmp/openmlrl-site
+
+        # Deploy to static/CoMLRL so Hugo will copy it to public/CoMLRL
+        rm -rf /tmp/openmlrl-site/static/CoMLRL
+        mkdir -p /tmp/openmlrl-site/static/CoMLRL
+        cp -r docs/public/* /tmp/openmlrl-site/static/CoMLRL/
+
+        # Commit and push changes
+        cd /tmp/openmlrl-site
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add static/CoMLRL/
+        if git diff --staged --quiet; then
+          echo "No changes to deploy"
+        else
+          git commit -m "Deploy CoMLRL docs from commit ${{ github.sha }}"
+          git push origin main
+        fi

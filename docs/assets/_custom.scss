@@ -1,0 +1,408 @@
+$menu-bg: #f8f9fb; /* whiter, subtler blue tint */
+$menu-border: #e5e5e5;
+$menu-hover: #ececec;
+$menu-text: #111;
+/* Custom colors for sidebar: sections vs files */
+$menu-section-color: #384058; /* darker by 10 each channel */
+$menu-item-color: #545b74;    /* darker by 10 each channel */
+$menu-brand-color: #202532;   /* darker by 10 each channel */
+
+/* Single source of truth for sidebar width */
+$sidebar-width: 18rem;
+
+/* Article text color (derived from sidebar) */
+$article-text-color: $menu-item-color; /* keep variable for potential reuse */
+
+.book-menu {
+  background: $menu-bg;
+  border-right: 1px solid $menu-border;
+  color: $menu-text;
+  flex: 0 0 $sidebar-width; /* slightly wider */
+  width: $sidebar-width;   /* match flex-basis */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: auto;
+}
+
+.book-menu .book-menu-content {
+  padding: 1.2rem;
+  width: $sidebar-width;
+}
+
+.book-menu a {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  color: $menu-text;
+  text-decoration: none;
+}
+
+.book-menu a:hover {
+  background: $menu-hover;
+}
+
+.book-menu a.active,
+.book-menu li.active > a,
+.book-menu a[aria-current="page"],
+.book-menu a[aria-current="true"] {
+  background: $menu-border;
+}
+
+.book-menu a:focus-visible {
+  outline: 2px solid #6ea8fe;
+  outline-offset: 2px;
+}
+
+.book-brand,
+.book-brand a {
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: $menu-brand-color;
+}
+
+/* Make only top-level section titles bold; keep nested items normal */
+/* Bold + non-clickable for top-level section titles */
+.book-menu li.book-section > a,
+.book-menu li.book-section-flat > a,
+.book-menu .book-menu-content > ul > li > a,
+.book-menu .book-menu-content nav > ul > li > a {
+  font-weight: 700 !important;
+  pointer-events: none;
+  cursor: default;
+  font-size: 1.05rem; /* section name size */
+  color: $menu-section-color;
+}
+.book-menu li.book-section > label,
+.book-menu li.book-section > summary,
+.book-menu .book-menu-content > ul > li > label,
+.book-menu .book-menu-content > ul > li > summary {
+  font-weight: 700 !important;
+  font-size: 1.05rem; /* section name size */
+  color: $menu-section-color;
+}
+
+/* Reset nested lists (children) to normal weight and clickable */
+.book-menu li.book-section ul a,
+.book-menu li.book-section-flat ul a,
+.book-menu .book-menu-content > ul > li ul a,
+.book-menu .book-menu-content nav > ul > li > ul > li > a,
+.book-menu nav ul li ul li > a,
+.book-menu nav ul li ul li > a.active,
+.book-menu nav ul li ul li > a[aria-current="page"],
+.book-menu nav ul li ul li > a[aria-current="true"] {
+  font-weight: 400 !important;
+  pointer-events: auto;
+  cursor: pointer;
+  padding-left: 1.5rem; /* adjusted indent for child items */
+  font-size: 0.95rem; /* file (page) link size */
+  color: $menu-item-color;
+}
+
+/* Add spacing between top-level sections */
+.book-menu .book-menu-content > ul > li,
+.book-menu .book-menu-content nav > ul > li {
+  margin-bottom: 2rem !important;
+}
+
+/* Remove margin from last section */
+.book-menu .book-menu-content > ul > li:last-child,
+.book-menu .book-menu-content nav > ul > li:last-child {
+  margin-bottom: 0rem !important;
+}
+
+/* Normalize nested list indent so Trainer matches other sections */
+.book-menu .book-menu-content nav > ul > li > ul {
+  padding-inline-start: 0 !important;
+  margin: 0;
+}
+
+/* Optional: indent nested labels as well */
+.book-menu li.book-section ul label,
+.book-menu li.book-section-flat ul label,
+.book-menu .book-menu-content > ul > li ul label {
+  padding-left: 1.5rem;
+  font-size: 1rem;
+}
+
+/* Article typography: updated sizes and weights */
+.book-article {
+  font-size: 1rem;
+  color: $menu-item-color !important;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  margin-left: 1.5rem;
+  margin-right: 0rem;
+}
+.book-article h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $menu-section-color !important;
+  margin-top: 2rem;
+  margin-bottom: 1.25rem;
+}
+.book-article h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: $menu-section-color !important;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.book-article h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $menu-section-color !important;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+/* Neutralize smaller headings to body size */
+.book-article h4,
+.book-article h5,
+.book-article h6 {
+  font-size: 1rem;
+  color: $menu-item-color !important;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Remove ToC completely */
+.book-toc {
+  display: none !important;
+}
+
+/* Hide TOC toggle control in header */
+.book-header label[for="toc-control"] {
+  display: none !important;
+}
+
+/* Tab container spacing */
+.book-tabs {
+  margin-top: 2rem !important;
+  margin-bottom: 2rem !important;
+}
+
+/* Tab labels bold, content normal */
+.book-tabs label {
+  font-weight: 700 !important;
+  font-size: 0.88rem !important;
+  margin: 0.2rem;
+}
+
+/* Tab content font size */
+.book-tabs .book-tabs-content {
+  font-size: 0.95rem !important;
+}
+
+/* Search box keyboard shortcut hint */
+.book-search {
+  position: relative;
+  margin-top: 1rem !important;
+  margin-bottom: 2rem !important;
+}
+
+.book-search input {
+  padding-right: 3.5rem !important;
+  border-width: 2px !important;
+  border-radius: 12px !important;
+  border-color: #ccc !important;
+}
+
+.book-search::after {
+  content: '⌘K';
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #999;
+  background: #f0f0f0;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  pointer-events: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+}
+
+/* Show Ctrl+K on non-Mac systems */
+@media (pointer: fine) {
+  .book-search::after {
+    content: 'Ctrl+K';
+  }
+}
+
+/* Override back to ⌘K on Mac */
+@supports (-webkit-touch-callout: none) {
+  .book-search::after {
+    content: '⌘K';
+  }
+}
+
+/* Copy code button */
+.copy-code-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  background: #f0f0f0;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #999;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  transition: background 0.1s;
+}
+
+.copy-code-button:hover {
+  background: #e0e0e0;
+}
+
+.copy-code-button:active {
+  background: #d0d0d0;
+}
+
+/* Floating copyright footer across the page */
+.omlrl-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.50rem 0.75rem;
+  background: $menu-bg;
+  border-top: 1px solid $menu-border;
+  color: $menu-item-color;
+  font-size: 0.8rem;
+  z-index: 1000;
+}
+
+/* Avoid overlap with footer bar */
+body {
+  padding-bottom: 2.25rem; /* reserve space for floating footer */
+}
+
+@media print {
+  .omlrl-footer { display: none !important; }
+  body { padding-bottom: 0; }
+}
+
+/* Lighter hint box backgrounds (15% lighter) */
+.book-hint.info {
+  background-color: #f4f9ff !important;
+  border-left-color: #a0d2f0 !important;
+}
+
+.book-hint.warning {
+  background-color: #fffcf0 !important;
+  border-left-color: #ffe3a0 !important;
+}
+
+.book-hint.danger {
+  background-color: #fff7f8 !important;
+  border-left-color: #ffd4dc !important;
+}
+
+.book-hint.success {
+  background-color: #f2faf3 !important;
+  border-left-color: #c2e4c5 !important;
+}
+
+/* ========== Custom responsive styles: always-visible sidebar ========== */
+/* Override default mobile behavior: keep sidebar always visible with same styling */
+@media screen and (max-width: 1600px) {
+  /* Keep sidebar visible, no transforms or negative margins */
+  .book-menu {
+    visibility: visible !important;
+    margin-inline-start: 0 !important;
+    background: $menu-bg !important; /* maintain gray background */
+    border-right: 1px solid $menu-border !important; /* maintain border */
+  }
+
+  .book-menu .book-menu-content {
+    transform: none !important;
+    box-shadow: none !important;
+    background: transparent !important; /* let parent background show through */
+  }
+
+  /* Hide mobile header (contains hamburger menu button) */
+  .book-header {
+    display: none !important;
+  }
+
+  /* Hide menu control buttons */
+  #menu-control,
+  #toc-control {
+    display: none !important;
+  }
+
+  /* Remove menu overlay */
+  .book-menu-overlay {
+    display: none !important;
+  }
+
+  /* Page content keeps normal opacity */
+  .book-page {
+    opacity: 1 !important;
+  }
+
+  /* Scale to fit 1600px viewport: 1600/1600 = 100% (no scaling yet) */
+  html {
+    font-size: 16px !important; /* full size at 1600px */
+  }
+
+  /* Logo and brand title scale with font size */
+  .book-brand,
+  .book-brand a {
+    font-size: 1.5rem !important; /* rem units scale with root font-size */
+  }
+
+  .book-brand img {
+    height: 1.5em !important; /* em units scale with font-size */
+    width: auto !important; /* auto width preserves aspect ratio */
+    max-width: none !important; /* remove any max-width constraints */
+    max-height: none !important; /* remove any max-height constraints */
+  }
+
+  /* GitHub corner icon scales with root font size */
+  .github-corner svg {
+    width: 5rem !important; /* use rem units to scale with root font-size */
+    height: 5rem !important; /* 80px at 16px base = 5rem */
+  }
+}
+
+/* Large screens: scale to fit 1400px viewport */
+@media screen and (max-width: 1400px) {
+  html {
+    font-size: 14px !important; /* 1400/1600 = 87.5% → 16px * 0.875 = 14px */
+  }
+}
+
+/* Medium-large screens: scale to fit 1200px viewport */
+@media screen and (max-width: 1200px) {
+  html {
+    font-size: 12px !important; /* 1200/1600 = 75% → 16px * 0.75 = 12px */
+  }
+}
+
+/* Medium screens: scale to fit 1000px viewport */
+@media screen and (max-width: 1000px) {
+  html {
+    font-size: 10px !important; /* 1000/1600 = 62.5% → 16px * 0.625 = 10px */
+  }
+}
+
+/* Narrow screens: scale to fit 800px viewport */
+@media screen and (max-width: 800px) {
+  html {
+    font-size: 8px !important; /* 800/1600 = 50% → 16px * 0.5 = 8px */
+  }
+}
+
+/* Very narrow screens: scale to fit 600px viewport */
+@media screen and (max-width: 600px) {
+  html {
+    font-size: 6px !important; /* 600/1600 = 37.5% → 16px * 0.375 = 6px */
+  }
+}
